@@ -295,6 +295,40 @@ window.addEventListener("resize", () => {
 });
 
 applyResponsiveStyles();
+let touchStartX = 0;
+let touchStartY = 0;
+
+canvas.addEventListener("touchstart", function (e) {
+  const touch = e.touches[0];
+  touchStartX = touch.clientX;
+  touchStartY = touch.clientY;
+}, false);
+
+canvas.addEventListener("touchend", function (e) {
+  const touch = e.changedTouches[0];
+  const deltaX = touch.clientX - touchStartX;
+  const deltaY = touch.clientY - touchStartY;
+
+  if (Math.abs(deltaX) > Math.abs(deltaY)) {
+    // החלקה לרוחב
+    if (deltaX > 30 && goX !== -1) {
+      goX = 1;
+      goY = 0;
+    } else if (deltaX < -30 && goX !== 1) {
+      goX = -1;
+      goY = 0;
+    }
+  } else {
+    // החלקה לאורך
+    if (deltaY > 30 && goY !== -1) {
+      goX = 0;
+      goY = 1;
+    } else if (deltaY < -30 && goY !== 1) {
+      goX = 0;
+      goY = -1;
+    }
+  }
+}, false);
 
 startGame();
 
